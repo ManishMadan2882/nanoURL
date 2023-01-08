@@ -1,7 +1,11 @@
+require('dotenv').config();
+
 const mongoose = require('mongoose');
+
 require('mongoose-type-url')
+
 mongoose.set('strictQuery', false);
-mongoose.connect("mongodb://localhost:27017/url-shortener",{directConnection:true})
+mongoose.connect(process.env.mongourl)
 .then(()=>{
     console.log('connection to database is successful');
 })
@@ -13,9 +17,10 @@ mongoose.connect("mongodb://localhost:27017/url-shortener",{directConnection:tru
         type:mongoose.SchemaTypes.Url
     },
     short_link:{
-        type:mongoose.SchemaTypes.Url,
+        type:String,
         unique:true
     }
 })
-const db=mongoose.model('url-info',schema);
+const db=mongoose.model('urls',schema);
+
 module.exports = db; 
