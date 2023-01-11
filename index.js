@@ -46,7 +46,7 @@ app.post('/',async (req,res)=>{
 });
 
 app.get('/',(req,res)=>{
-    res.json({responded:false});
+    res.sendFile('./public/index.html');
 });
 app.listen(port,()=>{
     console.log('Server running at port : '+port);
