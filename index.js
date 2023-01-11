@@ -1,4 +1,4 @@
-const ejs = require('ejs');
+
 const crypto = require('crypto');
 require('dotenv').config()
 const express = require('express');
@@ -8,7 +8,7 @@ const path=require('path');
 const port = process.env.PORT || 3030;
 const db=require('./src/db');
 
-app.set('view engine','ejs');
+app.use(express.static(path.join(__dirname,'./public')));
 app.use(express.urlencoded({extended:true}));
 app.use(express.json())
 app.get('/:url',async (req,res)=>{
@@ -20,15 +20,13 @@ app.get('/:url',async (req,res)=>{
 
 })
 app.post('/',async (req,res)=>{
-    const real = req.body.url;//
-    console.log(real);
+    const real = req.body.url;
     let random;
     const dbObj = await db.findOne({complete_link : real});
    
     if(dbObj != null)
-    return res.status(200).render('index2',{responded:true,shortURL:`${req.get('origin')}/${random}`});
-    //return res.render('index',{responded:true,shortURL:`${req.hostname}/${dbObj.short_link}`});
-   // return res.json({route:dbObj.short_link}); 
+    return res.status(200).json({responded:true,complete_link:real,short_link:`${req.get('origin')}/${dbObj.short_link}`});
+ 
 
     do{
    
@@ -43,13 +41,12 @@ app.post('/',async (req,res)=>{
     });     
 
     await newbie.save();
-    return res.status(200).render('index2',{responded:true,shortURL:`${req.get('origin')}/${random}`});
-    //res.status(200).json({route:random})
+    return res.status(200).json({responded:true,complete_link:real,short_link:`${req.get('origin')}/${random}`});
+    
 });
 
 app.get('/',(req,res)=>{
-    res.render('index',{responded:false});
-   //res.sendFile(path.join(__dirname,'./public/index.html'));
+    res.json({responded:false});
 });
 app.listen(port,()=>{
     console.log('Server running at port : '+port);
