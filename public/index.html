@@ -32,8 +32,21 @@
             })
             .then((res)=>res.json())
             .then((data)=>{
-                    console.log(data);
-                    let newElem=document.createElement('div');
+                    if(document.body.contains(document.getElementById('reply')))
+                    {
+                        document.getElementById('reply').innerHTML=`
+                    <span id="shortlink" class=" bg-teal-200 p-2 float-left text-sm">
+                
+                     ${data.short_link}
+              
+                    </span>
+                    <button  id="copy" onclick="copyURL()"  class="float-right inline text-teal-700 font-semibold  bg-teal-300 hover:bg-teal-500 drop-shadow-2xl text-sm hover:text-white p-2  my-2">Copy URL</button>
+    
+                    `;
+                    }
+                    else{
+                    
+                   let newElem=document.createElement('div');
                     newElem.classList.add("text-center","my-6");
                     newElem.setAttribute("id", "reply");
                     newElem.innerHTML=`
@@ -46,6 +59,9 @@
     
                     `;
                     document.getElementById('main').appendChild(newElem);
+
+                    }
+ 
                     document.getElementById('subm').disabled = true;
                     
                     
